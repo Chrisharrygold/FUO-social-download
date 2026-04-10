@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUO Social Download</title>
+    <style>
+        :root {
+            --google-blue: #0b57d0;
+            --bg-gray: #eff4f9; 
+            --text-main: #000000;
+            --text-sub: #444746;
+            --warning-bg: #fceeee; 
+            --warning-accent: #b3261e;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            padding: 20px;
+        }
+
+        /* --- MAIN WRAPPER --- */
+        .app-container {
+            width: 100%;
+            max-width: 420px; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- 1. HEADER SECTION --- */
+        .header-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-left: 5px;
+        }
+
+        .app-icon {
+            width: 95px;
+            height: 95px;
+            border-radius: 20px;
+            background-color: var(--bg-gray);
+            cursor: pointer;
+            object-fit: cover;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .title-group {
+            margin-left: 20px;
+        }
+
+        .title-group h1 {
+            font-size: 28px;
+            margin: 0;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: var(--google-blue);
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        /* --- 2. INSTALL BUTTON AREA --- */
+        .install-btn {
+            display: block;
+            background-color: var(--google-blue);
+            color: white;
+            text-align: center;
+            padding: 14px 0;
+            border-radius: 30px; 
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        /* --- 3. SCREENSHOTS AREA --- */
+        .screenshots-row {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            margin-bottom: 30px;
+            scrollbar-width: none; 
+        }
+        .screenshots-row::-webkit-scrollbar { display: none; }
+
+        .screenshot-item {
+            min-width: 125px;
+            height: 230px;
+            background-color: var(--bg-gray);
+            border-radius: 12px;
+            cursor: pointer;
+            object-fit: cover;
+        }
+
+        /* --- 4. ABOUT BOX --- */
+        .section-card {
+            background-color: var(--bg-gray);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .section-card h2 {
+            font-size: 20px;
+            margin: 0 0 15px 0;
+            font-weight: 500;
+        }
+
+        .section-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        /* --- 5. WARNING NOTE BOX --- */
+        .note-card {
+            background-color: var(--warning-bg);
+            border-radius: 24px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .android-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: var(--warning-accent);
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+
+        .note-card h2 {
+            font-size: 20px;
+            margin: 0 0 12px 0;
+            font-weight: 500;
+        }
+
+        .note-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #1f1f1f;
+            margin-bottom: 10px;
+        }
+
+        .qr-action-text {
+            display: block;
+            text-align: right;
+            color: var(--warning-accent);
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* --- FULLSCREEN MODAL & PAGER --- */
+        #img-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000000;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .pager-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .pager-container::-webkit-scrollbar { display: none; }
+
+        .pager-item {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+        }
+
+        .pager-item img {
+            max-width: 100%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 24px;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <div class="header-row">
+        <img src="https://www.dropbox.com/scl/fi/q7jmmkcg7gccz12pitxes/20260219_194533.png?rlkey=y97fxrjinj5g22dnkohy92wzi&st=0afc3y9q&dl=1" alt="Icon" class="app-icon" onclick="showFull(this.src)">
+        <div class="title-group">
+            <h1>FUO social</h1>
+            <div class="subtitle">Federal university otuoke</div>
+        </div>
+    </div>
+
+    <a href="https://dl.dropboxusercontent.com/scl/fi/s9voum09az7c9kz67qu8r/app3897884-gvy0ru.apk?rlkey=gaxb3tq2463fcv7vj5rzghy63&st=yhdl1zkd&dl=1" class="install-btn">Install</a>
+
+    <div class="screenshots-row" id="main-screenshots">
+        <img src="https://www.dropbox.com/scl/fi/9506904npdzmhkugzi4ef/20260406_185340.png?rlkey=99s1zjmdsel1ybyhcm33ojhul&st=5j2ci6km&dl=1" class="screenshot-item" onclick="showFull(this.src)">
+        <img src="https://www.dropbox.com/scl/fi/v6gb26t52192ea61jzdr7/20260406_185923.png?rlkey=uece8ch7rgmdcpevn6xckcv82&st=3c9tg2kh&dl=1" class="screenshot-item" onclick="showFull(this.src)">
+        <img src="https://www.dropbox.com/scl/fi/gow90phxj8gpt8wc1zvfd/20260410_140800.png?rlkey=6gt6gzfxs4zrtqp4s3qrbaavq&st=mpyanbh3&dl=1" class="screenshot-item" onclick="showFull(this.src)">
+        <img src="https://www.dropbox.com/scl/fi/6spm2epudycvqxm52v4ku/20260406_190337.png?rlkey=jk9mpeqv1utcx8ki0wfrv9icr&st=obsjztdu&dl=1" class="screenshot-item" onclick="showFull(this.src)">
+        <img src="https://www.dropbox.com/scl/fi/jbric43j6qwtydoe74gjs/20260410_135334.png?rlkey=yrcxkkm448haue4irjf1h28hj&st=d0w8hji6&dl=1" class="screenshot-item" onclick="showFull(this.src)">
+        <img src="https://www.dropbox.com/scl/fi/xcxulv41vtbkyxdpmdqo8/20260406_195527.png?rlkey=8qs2wi8w15g49kk9olqrgp23a&st=h4vn52vj&dl=1" class="screenshot-item" onclick="showFull(this.src)">
+    </div>
+
+    <div class="section-card">
+        <h2>About this app</h2>
+        <p>
+            Welcome to FUO Social, a dedicated space built for people to connect and grow together. 
+            Whether you're sharing your latest thoughts, exchanging big ideas, or simply staying 
+            in touch with loved ones, this platform is designed to keep you close to the people who matter most.
+        </p>
+    </div>
+
+    <div class="note-card">
+        <div class="android-badge">For android only</div>
+        <h2>Note</h2>
+        <p class="note-text">
+            This app is completely safe and legal. However, because it isn't listed on the Google Play Store yet, 
+            Android will show a security warning. To continue, just tap Settings in the popup and toggle on 
+            'Allow from this source' to finish the installation.
+        </p>
+        <div class="qr-action-text" onclick="showFull('https://www.dropbox.com/scl/fi/0izch9hs99f6g7x4u8w8a/20260410_153824.png?rlkey=t4c5u2a0sk634cvamn50r38u2&st=58vwns9p&dl=1')">
+            Download with QR code
+        </div>
+    </div>
+</div>
+
+<div id="img-modal">
+    <div class="back-button" onclick="closeFull()">&#8592;</div>
+    <div class="pager-container" id="pager">
+        </div>
+</div>
+
+<script>
+    const modal = document.getElementById('img-modal');
+    const pager = document.getElementById('pager');
+    const screenshotList = document.querySelectorAll('#main-screenshots img');
+
+    // Pre-populate the pager with screenshots
+    function initPager() {
+        pager.innerHTML = '';
+        screenshotList.forEach(img => {
+            const div = document.createElement('div');
+            div.className = 'pager-item';
+            const newImg = document.createElement('img');
+            newImg.src = img.src;
+            div.appendChild(newImg);
+            pager.appendChild(div);
+        });
+    }
+
+    function showFull(url) {
+        // Special case for Icon or QR Code (single view)
+        const isScreenshot = Array.from(screenshotList).some(img => img.src === url);
+        
+        if (!isScreenshot) {
+            pager.innerHTML = `<div class="pager-item"><img src="${url}"></div>`;
+        } else {
+            initPager();
+            // Scroll to the correct image
+            const index = Array.from(screenshotList).findIndex(img => img.src === url);
+            setTimeout(() => {
+                pager.scrollTo({ left: pager.offsetWidth * index, behavior: 'auto' });
+            }, 10);
+        }
+
+        modal.style.display = 'flex';
+        window.history.pushState({modalOpen: true}, "");
+    }
+
+    function closeFull() {
+        modal.style.display = 'none';
+        if(window.history.state && window.history.state.modalOpen) {
+            window.history.back();
+        }
+    }
+
+    window.onpopstate = function() {
+        modal.style.display = 'none';
+    };
+</script>
+
+</body>
+</html>
